@@ -1,21 +1,25 @@
 const roundDecimal = 4;
 
 function add(a, b) {
-    return Math.round((parseFloat(a) + parseFloat(b)) * 10 ** roundDecimal) / 10 ** roundDecimal;
+    return Math.round((parseFloat(a) + parseFloat(b)) * 10 ** roundDecimal) 
+        / 10 ** roundDecimal;
 }
 
 function subtract(a, b) {
-    return Math.round((parseFloat(a) - parseFloat(b)) * 10 ** roundDecimal) / 10 ** roundDecimal;
+    return Math.round((parseFloat(a) - parseFloat(b)) * 10 ** roundDecimal) 
+        / 10 ** roundDecimal;
 }
 
 function multiply(a, b) {
-    return Math.round((parseFloat(a) * parseFloat(b)) * 10 ** roundDecimal) / 10 ** roundDecimal;
+    return Math.round((parseFloat(a) * parseFloat(b)) * 10 ** roundDecimal) 
+        / 10 ** roundDecimal;
 }
 
 function divide(a, b) {
     return (b == 0)? 
         "Cannot Divide By 0": 
-        Math.round((parseFloat(a) / parseFloat(b)) * 10 ** roundDecimal) / 10 ** roundDecimal;
+        Math.round((parseFloat(a) / parseFloat(b)) * 10 ** roundDecimal) 
+            / 10 ** roundDecimal;
 }
 
 function percentage(num) {
@@ -34,23 +38,38 @@ const operationButtons = allButtons.filter(button => {
         button.textContent == "÷" || 
         button.textContent == "x" ||
         button.textContent == "-" ||
-        button.textContent == "+"
+        button.textContent == "+" ||
+        button.textContent == "+/-"
     )
 })
 
-let currentNumber = ""
+let currentExpression = ""
 numButons.concat(operationButtons).forEach((button) => {
     button.addEventListener("click", () => {
-        currentNumber += button.textContent
-        console.log(currentNumber)
-        displayResult.textContent = currentNumber;
+        currentExpression += button.textContent
+        console.log(currentExpression)
+        displayResult.textContent = currentExpression;
     })
 })
 
 clearButton.addEventListener(("click"), () => {
-    currentNumber = ""
-    displayResult.textContent = currentNumber;
+    currentExpression = ""
+    displayResult.textContent = currentExpression;
 })
+
+
+allButtons.filter(button => !operationButtons.includes(button))
+    .forEach((button) => {
+        const currentBackgroundColor = getComputedStyle(button).backgroundColor;
+        const newBackgroundColor = `rgba(${currentBackgroundColor.match(/\d+/g).
+            concat("0.5").join(", ")})`;
+        button.addEventListener("mousedown", () => {
+            button.style.backgroundColor = newBackgroundColor;
+        })
+        button.addEventListener("mouseup", () => {
+            button.style.backgroundColor = currentBackgroundColor;
+        })
+    })
 
 calculateButton.addEventListener(("click"), operate);
 
@@ -77,4 +96,10 @@ function operate(num1, operator, num2) {
     }
 }
 
-console.log("yo")
+allButtons.forEach(button => {
+        
+})
+
+function runOperate(displayResult) {
+
+}
