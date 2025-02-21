@@ -31,6 +31,7 @@ const mainContainer = document.querySelector("#main-container");
 
 const allButtons = Array.from(mainContainer.querySelectorAll("div > button"));
 const numButons = allButtons.filter(button => !isNaN(parseInt(button.textContent)));
+const decimalButton = allButtons.filter(button => button.textContent ==".")
 const clearButton = allButtons.find(button => button.textContent == "C");
 const calculateButton = allButtons.find(button => button.textContent == "=");
 const operationButtons = allButtons.filter(button => {
@@ -41,20 +42,6 @@ const operationButtons = allButtons.filter(button => {
         button.textContent == "+" ||
         button.textContent == "+/-"
     )
-})
-
-let currentExpression = ""
-numButons.concat(operationButtons).forEach((button) => {
-    button.addEventListener("click", () => {
-        currentExpression += button.textContent
-        console.log(currentExpression)
-        displayResult.textContent = currentExpression;
-    })
-})
-
-clearButton.addEventListener(("click"), () => {
-    currentExpression = ""
-    displayResult.textContent = currentExpression;
 })
 
 
@@ -71,8 +58,51 @@ allButtons.filter(button => !operationButtons.includes(button))
         })
     })
 
+allOperationsArray = operationButtons.map(button => button.textContent)
+let currentOperationButton = [];
+operationButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        currentOperationButton.push(button);
+        const n = currentExpression.length;
+
+        if (currentExpression !== "" && currentExpression[n - 1] !== ".") {
+            currentExpression += button.textContent
+            displayResult.textContent = currentExpression;
+            button.style["border-width"] = "4px"
+        }
+
+        const currentOperation = currentOperationButton[currentOperationButton.length - 2].textContent;
+        evalString = currentExpression.slice(0,-1).split(currentOperation);
+        console.log(evalString)
+        console.log(currentOperation)
+        if (evalString.length == 2 && evalString.every(item => item !== "")) {
+                const num1 = currentExpression.split(currentOperation)[0];
+                const num2 = currentExpression.split(currentOperation)[1];
+                currentExpression = operate(num1, currentOperation, num2);
+                displayResult.textContent = currentExpression;
+                currentExpression += button.textContent
+            }
+    })
+})
+
+let currentExpression = ""
+numButons.concat(decimalButton).forEach((button) => {
+    button.addEventListener("click", () => {
+        currentExpression += button.textContent
+        displayResult.textContent = currentExpression;
+        
+        if (currentOperationButton != []) {
+            currentOperationButton[currentOperationButton.length - 1].style["border-width"] = "1px"
+        }
+    })
+})
+
 calculateButton.addEventListener(("click"), operate);
 
+clearButton.addEventListener(("click"), () => {
+    currentExpression = ""
+    displayResult.textContent = currentExpression;
+})
 
 
 

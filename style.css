@@ -86,8 +86,8 @@ body {
 }
 
 #buttons .clear-button {
-  background-color: rgba(180, 173, 173, 1)
-  ;
+  color: white;
+  background-color: rgb(0, 0, 0);
 }
 
 #buttons .equal-button {
